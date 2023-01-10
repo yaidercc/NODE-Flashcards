@@ -37,9 +37,9 @@ class Server {
     }
 
     routes() {
-        this.app.use(this.userRoutes, this.app.use("../routes/users.routes.js"));
-        this.app.use(this.flashcardsRoutes, this.app.use("../routes/temarios.routes.js"));
-        this.app.use(this.temariosRoutes, this.app.use("../routes/temarios.routes.js"));
+        this.app.use(this.userRoutes, require("../routes/users.routes.js"));
+        this.app.use(this.flashcardsRoutes, require("../routes/temarios.routes.js"));
+        this.app.use(this.temariosRoutes, require("../routes/temarios.routes.js"));
     }
     listen() {
         // Puerto
