@@ -1,28 +1,47 @@
-const {Schema,model} = require("mongoose");
+const {
+    DataTypes
+} = require('sequelize');
+const connect = require("../database/config.db");
+
+// Conexion a la base de datos
+
+const userSchema = connect()
+    .then(connection => {
+        // Creando esquema de usuario
+        const Schema = connection.define("users", {
+            nombres: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            apellidos: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            username: {
+                type: DataTypes.DATEONLY,
+                allowNull: false
+            },
+            email: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            },
+            clave: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            }
+        });
+
+        connection.sync()
+            .catch((error) => {
+                console.error('No se pudo crear la tabla usuarios ', error);
+            });
+        return userSchema;
+
+    }).catch(err => {
+        console.log(err);
+    })
 
 
-const RoleSchema=Schema({
-    nombres:{
-        type:String,
-        required:[true,'Los nombres son obligatorios']
-    },
-    apellidos:{
-        type:String,
-        required:[true,'Los apellidos son obligatorios']
-    },
-    username:{
-        type:String,
-        required:[true,'El nombre de usuario es obligatorio']
-    },
-    email:{
-        type:String,
-        required:[true,'El email es obligatorio']
-    },
-    clave:{
-        type:String,
-        required:[true,'La clave es obligatoria']
-    },
-    
-})
 
-module.exports=model('Usuario',RoleSchema);
+
+module.exports = userSchema;
