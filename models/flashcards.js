@@ -1,23 +1,34 @@
-const {Schema,model} = require("mongoose");
+const {
+    DataTypes
+} = require('sequelize');
+const connection = require("../database/config.db");
 
-const RoleSchema=Schema({
-    termino:{
-        type:String,
-        required:[true,'Los nombres son obligatorios']
-    },
-    descripcion:{
-        type:String,
-        required:[true,'Los apellidos son obligatorios']
-    },
-    color:{
-        type:String,
-        required:[true,'El nombre de usuario es obligatorio']
-    },
-    temario: {
-        type:Schema.ObjectId,
-        ref: "Temario",
-        required: [true, 'El temario es obligatorio']
-    },
-})
+const temarioSchema = require('./temarios');
 
-module.exports=model('Flashcard',RoleSchema);
+const flashcardsSchema = connection.define("flashcards", {
+    termino: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    descripcion: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    color: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+    },
+
+});
+temarioSchema.hasMany(flashcardsSchema, {
+    foreignKey: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+flashcardsSchema.belongsTo(temarioSchema);
+
+
+module.exports = flashcardsSchema;

@@ -1,9 +1,7 @@
 const express = require("express");
 const cors = require('cors');
 
-const {
-    dbConnection
-} = require("../database/config.db");
+const createSchemas = require("./schemas");
 
 class Server {
     constructor() {
@@ -14,7 +12,7 @@ class Server {
         this.temariosRoutes = "/api/temarios"
 
         // Conexion a la base de datos
-        this.connectionBd();
+        this.creationSchemas();
 
         // Middlewares
         this.middlewares();
@@ -32,8 +30,8 @@ class Server {
         this.app.use(express.json());
     }
 
-    async connectionBd() {
-        await dbConnection();
+    async creationSchemas() {
+        await createSchemas();
     }
 
     routes() {

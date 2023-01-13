@@ -1,15 +1,28 @@
-const {Schema,model} = require("mongoose");
+const {
+    DataTypes
+} = require('sequelize');
+const connection = require("../database/config.db");
+const userSchema = require('./users');
 
-const RoleSchema=Schema({
-    nombre:{
-        type:String,
-        required:[true,'Los nombres son obligatorios']
+const temarioSchema = connection.define("temarios", {
+    nombre: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    propietario: {
-        type:Schema.ObjectId,
-        ref: "Usuario",
-        required: [true, 'El propietario es obligatorio']
+    descripcion: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-})
+});
 
-module.exports=model('Temario',RoleSchema);
+userSchema.hasMany(temarioSchema, {
+    foreignKey: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+temarioSchema.belongsTo(userSchema);
+
+module.exports = temarioSchema;

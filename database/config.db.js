@@ -1,15 +1,17 @@
-const mongoose = require("mongoose");
+const Sequelize = require('sequelize');
 
-const dbConnection = async () => {
-    try {
-        await mongoose.connect(process.env.MONGODB_CNN);
-        console.log("Base de datos online");
-    } catch (error) {
-        throw new Error('Error a la hora de iniciar la base de datos.');
-    }
+const sequelize = new Sequelize('flashcards', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysql',
+});
 
-}
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Conexión a la base de datos establecida con éxito.');
+    })
+    .catch(err => {
+        console.error('No se puede conectar a la base de datos:', err);
+    });
 
-module.exports = {
-    dbConnection
-}
+module.exports = sequelize;
