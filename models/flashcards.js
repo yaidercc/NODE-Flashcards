@@ -16,7 +16,7 @@ const flashcardsSchema = connection.define("flashcards", {
     },
     color: {
         type: DataTypes.DATEONLY,
-        allowNull: false
+        defaultValue:"#000000"
     },
 
 });
