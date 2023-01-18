@@ -1,6 +1,6 @@
 const flashcard = require("../models/flashcards");
 
-
+// TODO: ensayar crud flashcards
 /**
  * Funcion para obtener flashcards por el id del temario
  * @param {*} req 
@@ -12,7 +12,7 @@ const getFlashcardsByTemario = async (req, res) => {
     } = req.params;
 
     try {
-        const flashcards = await flashcard.findOne({
+        const flashcards = await flashcard.findAll({
             where: {
                 temarioId: id
             }
@@ -112,10 +112,6 @@ const deleteFlashcard = async (req, res) => {
 
     try {
         await flashcard.destroy({
-            termino,
-            descripcion,
-            color
-        }, {
             where: {
                 id: id
             }
