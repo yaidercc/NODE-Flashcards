@@ -36,7 +36,7 @@ class Server {
 
     routes() {
         this.app.use(this.userRoutes, require("../routes/users.routes.js"));
-        this.app.use(this.flashcardsRoutes, require("../routes/temarios.routes.js"));
+        this.app.use(this.flashcardsRoutes, require("../routes/flashcards.routes"));
         this.app.use(this.temariosRoutes, require("../routes/temarios.routes.js"));
     }
     listen() {

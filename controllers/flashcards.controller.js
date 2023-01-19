@@ -1,6 +1,34 @@
 const flashcard = require("../models/flashcards");
 
-// TODO: ensayar crud flashcards
+/**
+ * Funcion para obtener una flashcard
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getFlashcard = async (req, res) => {
+    const {
+        id
+    } = req.params;
+
+    try {
+        const flashcards = await flashcard.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        res.json({
+            ok: true,
+            msg: "Flashcard consultadas con exito.",
+            flashcards
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: "Hubo un error al realizar la operacion: " + error
+        })
+    }
+}
 /**
  * Funcion para obtener flashcards por el id del temario
  * @param {*} req 
@@ -40,14 +68,16 @@ const postFlashcard = async (req, res) => {
     const {
         termino,
         descripcion,
-        color
+        color,
+        temarioId
     } = req.body;
 
     try {
         await flashcard.create({
             termino,
             descripcion,
-            color
+            color,
+            temarioId
         });
 
         res.json({
@@ -133,5 +163,6 @@ module.exports = {
     getFlashcardsByTemario,
     postFlashcard,
     updateFlashcard,
-    deleteFlashcard
+    deleteFlashcard,
+    getFlashcard
 }

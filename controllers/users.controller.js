@@ -57,23 +57,19 @@ const getUser = async (req, res) => {
                 id: id_user
             }
         });
-        if (!user) {
-            res.status(400).json({
-                ok: false,
-                msg: "No se encontro el usuario."
-            })
-        }
         res.json({
             ok: true,
+            msg: "Usuario consultado con exito.",
             user
         })
     } catch (error) {
         res.status(500).json({
-            ok: true,
+            ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })
     }
 }
+
 
 /**
  * Funcion encargada de actualizar un usuario

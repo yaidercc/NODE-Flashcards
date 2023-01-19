@@ -11,20 +11,26 @@ const {
     getFlashcardsByTemario,
     postFlashcard,
     updateFlashcard,
-    deleteFlashcard
+    deleteFlashcard,
+    getFlashcard
 } = require("../controllers/flashcards.controller");
+const { isValidTemario } = require("../helpers/db-validator");
 
 const router = Router();
 
-router.get("/flahscards/:id",[
+router.get("/flashcards/:id",[
     check("id", "El id es obligatorio y debe ser numerico").isNumeric()
 ], getFlashcardsByTemario);
+
+router.get("/flashcard/:id",[
+    check("id", "El id es obligatorio y debe ser numerico").isNumeric()
+], getFlashcard);
 
 router.post("/flashcard", [
     check("termino", "El termino es obligatorio").not().isEmpty(),
     check("descripcion", "La descripcion es obligatoria").not().isEmpty(),
-    check("temario", "El id del temario es obligatorio").not().isEmpty(),
-    check('temario').custom(isValidTemario),
+    check("temarioId", "El id del temario es obligatorio").not().isEmpty(),
+    check('temarioId').custom(isValidTemario),
     validarCampos
 ], postFlashcard);
 

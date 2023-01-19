@@ -44,7 +44,7 @@ const getTemarioById = async (req, res) => {
             where: {
                 id
             }
-        }) || [];
+        });
 
         res.json({
             ok: true,
