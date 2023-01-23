@@ -11,7 +11,8 @@ const {
     createUser,
     updateUser,
     getUser,
-    login
+    login,
+    refreshToken
 } = require("../controllers/users.controller");
 const {
     emailExists,
@@ -56,5 +57,8 @@ router.post("/users", [
     check("clave").custom(checkPassword),
     validarCampos
 ], createUser);
+
+
+router.get("/renew",validarJWT, refreshToken);
 
 module.exports = router;

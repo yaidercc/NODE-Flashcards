@@ -112,8 +112,6 @@ const updateUser = async (req, res) => {
     }
 }
 
-
-
 /**
  * Funcion encargada de iniciar sesion
  * @param {*} req 
@@ -150,11 +148,15 @@ const login = async (req, res) => {
             })
         }
 
+        console.log(user.id);
+
         // Generar token
-        const token = await generateJWT(user.id);
+        const token = await generateJWT(user.id,user.username);
 
         res.json({
             ok: true,
+            id:user.id,
+            username:user.username,
             token,
             msg: "Ingreso existoso."
         });
@@ -166,6 +168,30 @@ const login = async (req, res) => {
         });
     }
 }
+/**
+ * Funcion encargada de refrescar un token
+ * @param {*} req 
+ * @param {*} res 
+ */
+const refreshToken = async (req, res) => {
+
+    const {
+        username,
+        id
+    } = req.usuario;
+
+    const token = await generateJWT(id, username);
+
+    res.json({
+        ok: true,
+        id,
+        username,
+        token,
+    });
+
+}
+
+
 
 
 
@@ -173,5 +199,6 @@ module.exports = {
     createUser,
     getUser,
     updateUser,
-    login
+    login,
+    refreshToken
 }
