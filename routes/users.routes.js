@@ -14,12 +14,9 @@ const {
     login,
     refreshToken
 } = require("../controllers/users.controller");
-const {
-    emailExists,
-    usernameExists,
-    checkPassword,
-} = require("../helpers/db-validator");
-const validarJWT = require("../helpers/validar-jwt");
+
+const { validarJWT,emailExists,usernameExists,checkPassword } = require("../helpers");
+
 
 const router = Router();
 

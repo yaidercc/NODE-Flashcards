@@ -14,7 +14,7 @@ const {
     deleteFlashcard,
     getFlashcard
 } = require("../controllers/flashcards.controller");
-const { isValidTemario } = require("../helpers/db-validator");
+const { isValidTemario,validarJWT } = require("../helpers");
 
 const router = Router();
 
@@ -37,6 +37,7 @@ router.post("/flashcard", [
 ], postFlashcard);
 
 router.put("/flashcard/:id", [
+    validarJWT,
     check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
     check("termino", "El termino es obligatorio").not().isEmpty(),
     check("descripcion", "La descripcion es obligatoria").not().isEmpty(),
@@ -44,6 +45,7 @@ router.put("/flashcard/:id", [
 ], updateFlashcard);
 
 router.delete("/flashcard/:id", [
+    validarJWT,
     check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
     validarCampos
 ], deleteFlashcard);
