@@ -5,7 +5,7 @@ const {
     check
 } = require("express-validator");
 const {
-    validarCampos
+    validarCampos, validateOwner
 } = require("../middlewares/validar-campos");
 const {
     temarioExists, isValidUser,
@@ -17,6 +17,7 @@ const {
     updateTemario,
     getTemarioByUser
 } = require("../controllers/temarios.controller");
+const validarJWT = require("../helpers/validar-jwt");
 
 const router = Router();
 
@@ -38,12 +39,16 @@ router.post("/temario", [
 ], postTemario);
 
 router.put("/temario/:id", [
+    validarJWT,
+    validateOwner,
     check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
     validarCampos
 ], updateTemario);
 
 router.delete("/temario/:id", [
+    validarJWT,
+    validateOwner,
     check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
     validarCampos
 ], deleteTemario);
