@@ -1,7 +1,7 @@
 const {
-    alidarEmailAUsername,
     validarEmailAUsername
 } = require("../helpers/db-validator");
+const generateJWT = require("../helpers/generar-jwt");
 const usuario = require("../models/users");
 const bycryptjs = require("bcryptjs");
 
@@ -51,7 +51,7 @@ const getUser = async (req, res) => {
         } = req.params;
         const user = await usuario.findOne({
             attributes: {
-                exclude: ['clave','createdAt','updatedAt']
+                exclude: ['clave', 'createdAt', 'updatedAt']
             },
             where: {
                 id: id_user
@@ -113,17 +113,58 @@ const updateUser = async (req, res) => {
 }
 
 
-// TODO: Desarrollar login
+
 /**
  * Funcion encargada de iniciar sesion
  * @param {*} req 
  * @param {*} res 
- * 
  */
 const login = async (req, res) => {
-    res.json({
-        ok: false
-    })
+    const {
+        username,
+        clave
+    } = req.body;
+
+    try {
+
+        // Validar existencia de un nombre de usuario
+        const user = await usuario.findOne({
+            where: {
+                username,
+            }
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                ok: false,
+                msg: "Usuario y/o clave incorrecto"
+            })
+        }
+
+        // Valida la contraseña
+        const validatePass = bycryptjs.compareSync(clave, user.clave);
+        if (!validatePass) {
+            return res.status(400).json({
+                ok: false,
+                msg: "Usuario y/o clave incorrecto"
+            })
+        }
+
+        // Generar token
+        const token = await generateJWT(user.id);
+
+        res.json({
+            ok: true,
+            token,
+            msg: "Ingreso existoso."
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            ok: true,
+            msg: "Hubo un error al realizar la operacion: " + error
+        });
+    }
 }
 
 
@@ -132,4 +173,5 @@ module.exports = {
     createUser,
     getUser,
     updateUser,
+    login
 }

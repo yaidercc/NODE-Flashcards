@@ -19,11 +19,13 @@ const { isValidTemario } = require("../helpers/db-validator");
 const router = Router();
 
 router.get("/flashcards/:id",[
-    check("id", "El id es obligatorio y debe ser numerico").isNumeric()
+    check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
+    validarCampos
 ], getFlashcardsByTemario);
 
 router.get("/flashcard/:id",[
-    check("id", "El id es obligatorio y debe ser numerico").isNumeric()
+    check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
+    validarCampos
 ], getFlashcard);
 
 router.post("/flashcard", [

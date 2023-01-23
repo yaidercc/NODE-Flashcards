@@ -10,13 +10,15 @@ const {
 const {
     createUser,
     updateUser,
-    getUser
+    getUser,
+    login
 } = require("../controllers/users.controller");
 const {
     emailExists,
     usernameExists,
     checkPassword,
 } = require("../helpers/db-validator");
+const validarJWT = require("../helpers/validar-jwt");
 
 const router = Router();
 
@@ -24,6 +26,14 @@ router.get("/users/:id_user", [
     check("id_user", "El id de usuario no puede estar vacio.").not().isEmpty(),
     validarCampos
 ], getUser);
+
+
+router.post("/login", [
+    check("username", "El nombre de usuario es obligatorio").not().isEmpty(),
+    check("clave", "La clave es obligatoria.").not().isEmpty(),
+    validarCampos
+], login);
+
 
 router.put("/users/:id", [
     check("id", "El id es obligatorio").isNumeric(),
