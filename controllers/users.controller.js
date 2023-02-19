@@ -151,12 +151,12 @@ const login = async (req, res) => {
         console.log(user.id);
 
         // Generar token
-        const token = await generateJWT(user.id,user.username);
+        const token = await generateJWT(user.id, user.username);
 
         res.json({
             ok: true,
-            id:user.id,
-            username:user.username,
+            id: user.id,
+            username: user.username,
             token,
             msg: "Ingreso existoso."
         });
@@ -168,6 +168,26 @@ const login = async (req, res) => {
         });
     }
 }
+
+/**
+ * Funcion para logearse con google
+ * @param {*} req 
+ * @param {*} res 
+ */
+const googleSignin = (req, res) => {
+    try {
+        res.json({
+            ok:true,
+            msg:"correcto"
+        })
+    } catch (error) {
+        res.json({
+            ok:false,
+            error
+        })
+    }
+}
+
 /**
  * Funcion encargada de refrescar un token
  * @param {*} req 
@@ -200,5 +220,6 @@ module.exports = {
     getUser,
     updateUser,
     login,
-    refreshToken
+    refreshToken,
+    googleSignin
 }

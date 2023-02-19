@@ -22,16 +22,19 @@ const { validarJWT } = require("../helpers");
 const router = Router();
 
 router.get("/temarios/:id", [
+    validarJWT,
     check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
     validarCampos
 ], getTemarioByUser);
 
 router.get("/temario/:id", [
+    validarJWT,
     check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
     validarCampos
 ], getTemarioById);
 
 router.post("/temario", [
+    validarJWT,
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
     check("nombre").custom(temarioExists),
     check("userId").custom(isValidUser),

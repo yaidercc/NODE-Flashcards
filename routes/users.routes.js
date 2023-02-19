@@ -32,6 +32,13 @@ router.post("/login", [
     validarCampos
 ], login);
 
+router.post("/googleSignIn", [
+    check("id_token", "El id token es necesario.").not().isEmpty(),
+    validarCampos
+], googleSignin);
+
+
+
 
 router.put("/users/:id", [
     check("id", "El id es obligatorio").isNumeric(),
