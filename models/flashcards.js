@@ -1,34 +1,39 @@
 const {
-    DataTypes
-} = require('sequelize');
-const connection = require("../database/config.db");
+    Schema,
+    model
+} = require("mongoose");
 
-const temarioSchema = require('./temarios');
 
-const flashcardsSchema = connection.define("flashcards", {
+const FlashcardsSchema = Schema({
     termino: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: String,
+        required: [true, 'El termino es obligatorio'],
     },
-    descripcion: {
-        type: DataTypes.STRING,
-        allowNull: false
+    desripcion: {
+        type: String,
+        required: [true, "La descripcion es obligatorio"],
     },
     color: {
-        type: DataTypes.STRING,
-        defaultValue:"#000000"
+        type: String,
+        default: "#000000"
     },
-
+    usuario: {
+        type: Schema.Types.ObjectId,
+        ref: 'Temario',
+        required: true
+    }
 });
-temarioSchema.hasMany(flashcardsSchema, {
-    foreignKey: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
-});
-flashcardsSchema.belongsTo(temarioSchema);
 
-
-module.exports = flashcardsSchema;
+FlashcardsSchema.methods.toJSON = function () {
+    // Funcion para evitar mostrar la contraseña en el objeto de salida.
+    const {
+        __v,
+        _id,
+        ...flashcard
+    } = this.toObject();
+    return {
+        id: _id,
+        ...flashcard
+    };
+}
+module.exports = model('Flashcard', FlashcardsSchema);

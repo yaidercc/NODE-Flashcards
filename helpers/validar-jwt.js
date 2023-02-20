@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const usuario = require("../models/users");
+const usuarios = require("../models/usuarios");
+
 
 const validarJWT = async (req, res, next) => {
     const token = req.header("x-token");
@@ -16,11 +17,10 @@ const validarJWT = async (req, res, next) => {
         } = jwt.verify(token, process.env.SECRETKEY);
 
         // Buscar usuario
-        const user = await usuario.findByPk(id)
-
+        const user = await usuarios.findById(id)
+        
         // Validar existencia del usuario
         if (!user) {
-            console.log(user);
             return res.status(401).json({
                 ok: false,
                 msg: "Usuario no existe en la BD"

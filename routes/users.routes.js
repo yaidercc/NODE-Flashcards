@@ -15,33 +15,31 @@ const {
     refreshToken
 } = require("../controllers/users.controller");
 
-const { validarJWT,emailExists,usernameExists,checkPassword } = require("../helpers");
+const {
+    validarJWT,
+    emailExists,
+    usernameExists,
+    checkPassword,
+    isValidUser
+} = require("../helpers");
 
 
 const router = Router();
 
-router.get("/users/:id_user", [
+router.get("/:id_user", [
     check("id_user", "El id de usuario no puede estar vacio.").not().isEmpty(),
     validarCampos
 ], getUser);
 
-
-router.post("/login", [
-    check("username", "El nombre de usuario es obligatorio").not().isEmpty(),
-    check("clave", "La clave es obligatoria.").not().isEmpty(),
-    validarCampos
-], login);
-
-router.post("/googleSignIn", [
-    check("id_token", "El id token es necesario.").not().isEmpty(),
-    validarCampos
-], googleSignin);
+// router.post("/googleSignIn", [
+//     check("id_token", "El id token es necesario.").not().isEmpty(),
+//     validarCampos
+// ], googleSignin);
 
 
-
-
-router.put("/users/:id", [
-    check("id", "El id es obligatorio").isNumeric(),
+router.put("/:id", [
+    check("id", "El id es obligatorio").isMongoId(),
+    check("id").custom(isValidUser),
     check("nombres", "Los nombres son obligatorios").not().isEmpty(),
     check("apellidos", "Los apellidos son obligatorios").not().isEmpty(),
     check("username", "El nombre de usuario es obligatorio").not().isEmpty(),
@@ -50,19 +48,7 @@ router.put("/users/:id", [
 ], updateUser);
 
 
-router.post("/users", [
-    check("nombres", "Los nombres son obligatorios").not().isEmpty(),
-    check("apellidos", "Los apellidos son obligatorios").not().isEmpty(),
-    check("username", "El nombre de usuario es obligatorio").not().isEmpty(),
-    check("username").custom(usernameExists),
-    check("email", "El correo electronico es obligatorio").not().isEmpty(),
-    check("email").custom(emailExists),
-    check("clave", "La clave es obligatoria").not().isEmpty(),
-    check("clave").custom(checkPassword),
-    validarCampos
-], createUser);
 
-
-router.get("/renew",validarJWT, refreshToken);
+// router.get("/renew",validarJWT, refreshToken);
 
 module.exports = router;
