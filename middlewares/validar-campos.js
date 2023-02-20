@@ -24,14 +24,12 @@ const validarCampos = (req, res, next) => {
  */
 const validateOwner = (req, res, next) => {
     const temario = temarios.findOne({
-        where: {
-            userId: req.usuario.id
-        }
+        usuario: req.usuario.id
     })
-    if (!temario) {
+    if (req.body.id != temario.id) {
         return res.status(400).json({
-            ok:false,
-            msg:"El usuario no es el propietario del temario."
+            ok: false,
+            msg: "El usuario no es el propietario del temario."
         });
     }
     next();

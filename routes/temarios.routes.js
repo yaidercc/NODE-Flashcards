@@ -21,38 +21,39 @@ const { validarJWT } = require("../helpers");
 
 const router = Router();
 
-router.get("/temarios/:id", [
+router.get("/temariosByUser/:usuario", [
     validarJWT,
-    check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
+    check("usuario","Usuario vacio o invalido").isMongoId(),
     validarCampos
 ], getTemarioByUser);
 
-router.get("/temario/:id", [
+router.get("/:id", [
     validarJWT,
-    check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
+    check("id", "El id es invalido o esta vacio").isMongoId(),
     validarCampos
 ], getTemarioById);
 
-router.post("/temario", [
+router.post("/", [
     validarJWT,
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
     check("nombre").custom(temarioExists),
-    check("userId").custom(isValidUser),
+    check("usuario","Usuario vacio o invalido").isMongoId(),
+    check("usuario").custom(isValidUser),
     validarCampos
 ], postTemario);
 
-router.put("/temario/:id", [
+router.put("/:id", [
     validarJWT,
     validateOwner,
-    check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
+    check("id", "id invalido o esta vacio").isMongoId(),
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
     validarCampos
 ], updateTemario);
 
-router.delete("/temario/:id", [
+router.delete("/:id", [
     validarJWT,
     validateOwner,
-    check("id", "El id es obligatorio y debe ser numerico").isNumeric(),
+    check("id", "id invalido o esta vacio").isMongoId(),
     validarCampos
 ], deleteTemario);
 

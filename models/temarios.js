@@ -9,9 +9,13 @@ const TemarioSchema = Schema({
         type: String,
         required: [true, 'El nombre es obligatorio'],
     },
-    desripcion: {
+    descripcion: {
         type: String,
         required: [true, "La descripcion es obligatorio"],
+    },
+    estado:{
+        type:Boolean,
+        default:true
     },
     usuario: {
         type: Schema.Types.ObjectId,
@@ -25,11 +29,11 @@ TemarioSchema.methods.toJSON = function () {
     const {
         __v,
         _id,
-        ...usuario
+        ...temario
     } = this.toObject();
     return {
         id: _id,
-        ...usuario
+        ...temario
     };
 }
 module.exports = model('Temario', TemarioSchema);

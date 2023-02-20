@@ -9,7 +9,7 @@ const FlashcardsSchema = Schema({
         type: String,
         required: [true, 'El termino es obligatorio'],
     },
-    desripcion: {
+    descripcion: {
         type: String,
         required: [true, "La descripcion es obligatorio"],
     },
@@ -17,10 +17,14 @@ const FlashcardsSchema = Schema({
         type: String,
         default: "#000000"
     },
-    usuario: {
+    temario: {
         type: Schema.Types.ObjectId,
         ref: 'Temario',
         required: true
+    },
+    estado:{
+        type: Boolean,
+        default:true
     }
 });
 

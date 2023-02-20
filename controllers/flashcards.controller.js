@@ -11,11 +11,8 @@ const getFlashcard = async (req, res) => {
     } = req.params;
 
     try {
-        const flashcards = await flashcard.findOne({
-            where: {
-                id: id
-            }
-        });
+        const flashcards = await flashcard.findById(id)
+            .populate("temario", "nombre");
 
         res.json({
             ok: true,
@@ -23,7 +20,7 @@ const getFlashcard = async (req, res) => {
             flashcards
         })
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })
@@ -39,20 +36,38 @@ const getFlashcardsByTemario = async (req, res) => {
         id
     } = req.params;
 
+    const {
+        limite = 5, desde = 0
+    } = req.query;
+
     try {
-        const flashcards = await flashcard.findAll({
-            where: {
-                temarioId: id
-            }
-        });
+
+        const [flashcards, total] = await Promise.all([
+            // Registros
+            flashcard.find({
+                temario: id,
+                estado: true
+            })
+            .populate("temario", "nombre")
+            .skip(+desde)
+            .limit(+limite),
+
+            // Contador de registros
+            flashcard.countDocuments({
+                estado: true
+            })
+            .skip(+desde)
+            .limit(+limite),
+        ]);
 
         res.json({
             ok: true,
             msg: "Flashcards consultadas con exito.",
-            flashcards
+            flashcards,
+            total
         })
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })
@@ -69,23 +84,26 @@ const postFlashcard = async (req, res) => {
         termino,
         descripcion,
         color,
-        temarioId
+        temario
     } = req.body;
 
     try {
-        await flashcard.create({
+        const newFlashcard = new flashcard({
             termino,
             descripcion,
             color,
-            temarioId
+            temario
         });
+
+        await newFlashcard.save()
 
         res.json({
             ok: true,
             msg: "Flashcard agregada con exito.",
+            flashcard: newFlashcard
         })
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })
@@ -108,22 +126,19 @@ const updateFlashcard = async (req, res) => {
     } = req.body;
 
     try {
-        await flashcard.update({
+        const updtFlashcards = await flashcard.findByIdAndUpdate(id, {
             termino,
             descripcion,
             color
-        }, {
-            where: {
-                id: id
-            }
         });
 
         res.json({
             ok: true,
             msg: "Flashcard actualizada con exito.",
+            flashcard:updtFlashcards
         })
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })
@@ -141,10 +156,8 @@ const deleteFlashcard = async (req, res) => {
     } = req.params;
 
     try {
-        await flashcard.destroy({
-            where: {
-                id: id
-            }
+        await flashcard.findByIdAndUpdate(id, {
+            estado: false
         });
 
         res.json({
@@ -152,7 +165,7 @@ const deleteFlashcard = async (req, res) => {
             msg: "Flashcard eliminada con exito.",
         })
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })

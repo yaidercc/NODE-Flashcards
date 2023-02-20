@@ -7,23 +7,21 @@ const temarios = require("../models/temarios");
  */
 const getTemarioByUser = async (req, res) => {
     const {
-        id
+        usuario
     } = req.params;
 
     try {
-        const temario = await temarios.findAll({
-            where: {
-                userId:id
-            }
-        }) || [];
+        const temario = await temarios.find({
+            usuario
+        });
 
         res.json({
             ok: true,
             msg: "temario consultado con exito.",
-            temarios:temario
+            temarios: temario
         })
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })
@@ -40,11 +38,7 @@ const getTemarioById = async (req, res) => {
     } = req.params;
 
     try {
-        const temario = await temarios.findOne({
-            where: {
-                id
-            }
-        });
+        const temario = await temarios.findById(id);
 
         res.json({
             ok: true,
@@ -52,7 +46,7 @@ const getTemarioById = async (req, res) => {
             temario
         })
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })
@@ -68,22 +62,24 @@ const postTemario = async (req, res) => {
     const {
         nombre,
         descripcion,
-        userId
+        usuario
     } = req.body;
 
     try {
-        await temarios.create({
+        const newTemario = new temarios({
             nombre,
             descripcion,
-            userId
+            usuario
         });
+        await newTemario.save();
 
         res.json({
             ok: true,
             msg: "Temario agregado con exito.",
+            newTemario
         })
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })
@@ -101,25 +97,24 @@ const updateTemario = async (req, res) => {
     } = req.params;
     const {
         nombre,
-        descripcion,
+        descripcion
     } = req.body;
 
     try {
-        await temarios.update({
+        const temario = await temarios.findByIdAndUpdate(id, {
             nombre,
             descripcion
-        }, {
-            where: {
-                id: id
-            }
+        },{
+            new:true
         });
 
         res.json({
             ok: true,
             msg: "Temario actualizado con exito.",
+            temario
         })
     } catch (error) {
-        res.status(500).json({
+       return res.status(500).json({
             ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })
@@ -137,10 +132,8 @@ const deleteTemario = async (req, res) => {
     } = req.params;
 
     try {
-        await temarios.destroy({
-            where: {
-                id: id
-            }
+        await temarios.findByIdAndUpdate(id, {
+            estado: false
         });
 
         res.json({
@@ -148,7 +141,7 @@ const deleteTemario = async (req, res) => {
             msg: "Temario eliminado con exito.",
         })
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Hubo un error al realizar la operacion: " + error
         })
