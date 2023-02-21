@@ -13,7 +13,8 @@ class Server {
             usuarios: "/api/usuarios",
             flashcards: "/api/flashcards",
             temarios: "/api/temarios",
-            auth: "/api/auth"
+            auth: "/api/auth",
+            search: "/api/search"
         }
 
         // Conectar a base de datos
@@ -44,6 +45,7 @@ class Server {
         this.app.use(this.paths.flashcards, require("../routes/flashcards.routes"));
         this.app.use(this.paths.temarios, require("../routes/temarios.routes.js"));
         this.app.use(this.paths.auth, require("../routes/auth.routes.js"));
+        this.app.use(this.paths.search, require("../routes/search.routes.js"));
     }
     listen() {
         // Puerto

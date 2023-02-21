@@ -8,18 +8,12 @@ const {
     validarCampos
 } = require("../middlewares/validar-campos");
 const {
-    createUser,
     updateUser,
     getUser,
-    login,
-    refreshToken
+
 } = require("../controllers/users.controller");
 
 const {
-    validarJWT,
-    emailExists,
-    usernameExists,
-    checkPassword,
     isValidUser
 } = require("../helpers");
 
@@ -30,12 +24,6 @@ router.get("/:id_user", [
     check("id_user", "El id de usuario no puede estar vacio.").not().isEmpty(),
     validarCampos
 ], getUser);
-
-// router.post("/googleSignIn", [
-//     check("id_token", "El id token es necesario.").not().isEmpty(),
-//     validarCampos
-// ], googleSignin);
-
 
 router.put("/:id", [
     check("id", "El id es obligatorio").isMongoId(),
@@ -49,6 +37,7 @@ router.put("/:id", [
 
 
 
-// router.get("/renew",validarJWT, refreshToken);
+
 
 module.exports = router;
+

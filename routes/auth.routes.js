@@ -58,4 +58,6 @@ router.post("/changePassword", [
 
 router.post("/validateToken", validarJWT);
 
+
 module.exports = router;
+
