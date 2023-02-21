@@ -45,13 +45,3 @@ La API de este proyecto de flashcards te permite crear una cuenta, autenticarte,
 - Mongoose
 - JWT
 
-## Contribución
-
-Para contribuir en el proyecto, se deben seguir los siguientes pasos:
-
-1. Clonar el repositorio.
-2. Crear una rama (git checkout -b feature/feature-name).
-3. Realizar los cambios necesarios.
-4. Hacer commit de los cambios (git commit -am 'Add some feature').
-5. Hacer push a la rama (git push origin feature/feature-name).
-6. Crear un Pull Request.
